@@ -1,0 +1,17 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  clang-tidy:
+    name: Clang-tidy and CPPCheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: clang-tidy and CPPCheck
+        uses: smay1613/clang-tidy-action@master
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
