@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 
-TEST(foo, bar)
-{
+TEST(foo, bar) {
     ASSERT_TRUE(true);
 }
