@@ -15,3 +15,16 @@ jobs:
         uses: smay1613/clang-tidy-action@master
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  cpplint:
+    name: Cpplint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+      - name: Install cpplint
+        run: pip install cpplint
+      - name: Run cpplint
+        run: cpplint --recursive .
