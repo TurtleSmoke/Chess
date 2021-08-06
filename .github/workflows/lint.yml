@@ -27,4 +27,4 @@ jobs:
       - name: Install cpplint
         run: pip install cpplint
       - name: Run cpplint
-        run: cpplint --recursive .
+        run: cpplint --recursive . src test
