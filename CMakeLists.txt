@@ -21,5 +21,5 @@ target_link_libraries(unit_test PRIVATE Threads::Threads gtest gtest_main)
 
 add_test(
         NAME Unit
-        COMMAND make unit_test
+        COMMAND ./unit_test
 )

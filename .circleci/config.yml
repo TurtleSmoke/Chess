@@ -22,30 +22,30 @@ commands:
             - run: sudo apt-get update -qq
             - run: sudo apt-get install -y cmake
 
-    cmake_build_debug:
+    cmake_build:
         steps:
             - run: cmake -Bbuild $CMAKE_FLAGS
-            - run: cmake --build build --config Debug
 
     cmake_unit_test:
         steps:
+            - cmake_build
             - run: |
                 cd build
-                ./unit_test --verbose --gtest_output=json
+                make unit_test
+                ctest $CTEST_FLAGS
 
     cmake_test:
         steps:
             - checkout
             - build_gtest
             - install_cmake
-            - cmake_build_debug
             - cmake_unit_test
 
 jobs:
     build-and-test-gcc9:
         description: Build repo
         executor: gcc9
-        environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug }
+        environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug, CTEST_FLAGS: --output-on-failure --verbose }
         steps: [ cmake_test ]
 
 
