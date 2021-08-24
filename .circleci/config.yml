@@ -12,21 +12,27 @@ executors:
 
 commands:
     build_gtest:
+        description: Build GTest from submodule
         steps:
-            - run: cd third_party
-            - run: git submodule init
-            - run: git submodule update
+            - run: |
+                cd third_party
+                git submodule init
+                git submodule update
 
     install_cmake:
+        description: Install cmake
         steps:
-            - run: sudo apt-get update -qq
-            - run: sudo apt-get install -y cmake
+            - run: |
+                sudo apt-get update -qq
+                sudo apt-get install -y cmake
 
     cmake_build:
+        description: Create build directory
         steps:
             - run: cmake -Bbuild $CMAKE_FLAGS
 
     cmake_unit_test:
+        description: Build and run unit_test
         steps:
             - cmake_build
             - run: |
@@ -35,6 +41,7 @@ commands:
                 ctest $CTEST_FLAGS
 
     cmake_test:
+        description: Workflow to run all test
         steps:
             - checkout
             - build_gtest
