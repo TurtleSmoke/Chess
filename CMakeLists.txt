@@ -13,10 +13,8 @@ target_compile_options(CHESS PRIVATE -Wall -Werror -Wextra -pedantic)
 
 # Testing
 enable_testing()
-find_package(GTest REQUIRED)
 find_package(Threads REQUIRED)
-include(GoogleTest)
-
+add_subdirectory(third_party/googletest)
 add_executable(unit_test test/test.cc)
 target_compile_options(unit_test PRIVATE -Wall -Werror -Wextra -pedantic)
 target_link_libraries(unit_test PRIVATE Threads::Threads gtest gtest_main)
