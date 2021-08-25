@@ -1,5 +1,5 @@
 #include <iostream>
 
-auto main(int useless) -> int {
+int main() {
     std::cout << "Hello World" << std::endl;
 }
