@@ -1,5 +1,5 @@
 #include <iostream>
 
-auto main(int error) -> int {
+int main() {
     std::cout << "Hello World" << std::endl;
 }
