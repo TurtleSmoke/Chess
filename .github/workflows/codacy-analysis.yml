@@ -13,6 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install clang-tidy
+        run: sudo apt install clang-tidy
+
+      - name: Run clang-tidy
+        continue-on-error: true
+        run: clang-tidy src/* --checks='' -- > clang-tidy-output
+
+      - name: Remove absolute path
+        run: sed -i 's?'`pwd`/'??g' clang-tidy-output
+
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@master
         with:
