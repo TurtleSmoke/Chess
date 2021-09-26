@@ -46,3 +46,12 @@ add_test(
         NAME Unit
         COMMAND ./unit_test
 )
+
+# Coverage
+add_executable(coverage)
+target_sources(coverage PRIVATE
+        ${SRC}
+        ${SRC_UNIT_TEST})
+target_compile_options(coverage PRIVATE "-O0" "-g3" "--coverage")
+target_link_options(coverage PRIVATE "-O0" "-g3" "--coverage")
+target_link_libraries(coverage PRIVATE Threads::Threads gtest gtest_main)
