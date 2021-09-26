@@ -10,6 +10,9 @@ executors:
                   CMAKE_BUILD_FLAGS:
                   CTEST_FLAGS: --output-on-failure --verbose
 
+orbs:
+    codecov: codecov/codecov@3.1.0
+
 commands:
     build_gtest:
         description: Build GTest from submodule
@@ -40,6 +43,15 @@ commands:
                 make unit_test
                 ctest $CTEST_FLAGS
 
+    cmake_coverage:
+        description: Build and run coverage
+        steps:
+            - cmake_build
+            - run: |
+                  cd build
+                  make coverage
+                  ./coverage || true # Ugly hack to ignore test failure for coverage
+
     cmake_test:
         description: Workflow to run all test
         steps:
@@ -48,12 +60,33 @@ commands:
             - install_cmake
             - cmake_unit_test
 
+    generate-coverage-info-gcov:
+        description: use gcov to generate coverage information
+        steps:
+            - run : gcov -abcfu $(find build/CMakeFiles/coverage.dir/src -name "*.cc.o")
+
+    upload-to-codecov:
+        description: Upload coverage to Codecov
+        steps:
+            - checkout
+            - build_gtest
+            - install_cmake
+            - cmake_coverage
+            - generate-coverage-info-gcov
+            - codecov/upload:
+                validate: false
+
 jobs:
     build-and-test-gcc9:
         description: Build repo
         executor: gcc9
         environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug, CTEST_FLAGS: --output-on-failure --verbose }
         steps: [ cmake_test ]
+    upload-to-codecov:
+        description: Build and upload coverage to Codecov
+        executor: gcc9
+        environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug }
+        steps: [ upload-to-codecov ]
 
 
 workflows:
@@ -61,4 +94,6 @@ workflows:
     build-and-test:
         jobs:
             - build-and-test-gcc9
-
+    upload-to-codecov:
+        jobs:
+            - upload-to-codecov
