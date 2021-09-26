@@ -18,7 +18,7 @@ jobs:
 
       - name: Run clang-tidy
         continue-on-error: true
-        run: clang-tidy $(find src -name "*.cc") --checks='' -- > clang-tidy-output
+        run: clang-tidy $(find src -name "*.cc" -o -name "*.hh") --checks='' --header-filter=.* -- > clang-tidy-output
 
       - name: Remove absolute path
         run: sed -i 's?'`pwd`/'??g' clang-tidy-output
