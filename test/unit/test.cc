@@ -11,5 +11,5 @@ TEST(foo, bar2) {
 }
 
 TEST(foo, bar3) {
-    ASSERT_EQ(f1(0), 1);
+    ASSERT_EQ(f1(0), -1);
 }
