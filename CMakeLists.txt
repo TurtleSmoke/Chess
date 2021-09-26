@@ -25,9 +25,6 @@ target_compile_options(CHESS PRIVATE -Wall -Werror -Wextra -pedantic)
 # Test sources
 file(GLOB_RECURSE SRC_UNIT_TEST ${CMAKE_CURRENT_SOURCE_DIR}/test/unit/*.cc)
 
-# Global flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -pedantic")
-
 # Used for both test and coverage
 enable_testing()
 find_package(Threads REQUIRED)
