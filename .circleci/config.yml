@@ -1,99 +1,99 @@
 version: 2.1
 
 executors:
-    gcc9:
-        docker:
-            - image: conanio/gcc9
-              environment:
-                  CXX: g++-9
-                  CC: gcc-9
-                  CMAKE_BUILD_FLAGS:
-                  CTEST_FLAGS: --output-on-failure --verbose
+  gcc9:
+    docker:
+      - image: conanio/gcc9
+        environment:
+          CXX: g++-9
+          CC: gcc-9
+          CMAKE_BUILD_FLAGS:
+          CTEST_FLAGS: --output-on-failure --verbose
 
 orbs:
-    codecov: codecov/codecov@3.1.0
+  codecov: codecov/codecov@3.1.0
 
 commands:
-    build_gtest:
-        description: Build GTest from submodule
-        steps:
-            - run: |
-                cd third_party
-                git submodule init
-                git submodule update
+  build_gtest:
+    description: Build GTest from submodule
+    steps:
+      - run: |
+          cd third_party
+          git submodule init
+          git submodule update
 
-    install_cmake:
-        description: Install cmake
-        steps:
-            - run: |
-                sudo apt-get update -qq
-                sudo apt-get install -y cmake
+  install_cmake:
+    description: Install cmake
+    steps:
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y cmake
 
-    cmake_build:
-        description: Create build directory
-        steps:
-            - run: cmake -Bbuild $CMAKE_FLAGS
+  cmake_build:
+    description: Create build directory
+    steps:
+      - run: cmake -Bbuild $CMAKE_FLAGS
 
-    cmake_unit_test:
-        description: Build and run unit_test
-        steps:
-            - cmake_build
-            - run: |
-                cd build
-                make unit_test
-                ctest $CTEST_FLAGS
+  cmake_unit_test:
+    description: Build and run unit_test
+    steps:
+      - cmake_build
+      - run: |
+          cd build
+          make unit_test
+          ctest $CTEST_FLAGS
 
-    cmake_coverage:
-        description: Build and run coverage
-        steps:
-            - cmake_build
-            - run: |
-                  cd build
-                  make coverage
-                  ./coverage || true # Ugly hack to ignore test failure for coverage
+  cmake_coverage:
+    description: Build and run coverage
+    steps:
+      - cmake_build
+      - run: |
+          cd build
+          make coverage
+          ./coverage || true # Ugly hack to ignore test failure for coverage
 
-    cmake_test:
-        description: Workflow to run all test
-        steps:
-            - checkout
-            - build_gtest
-            - install_cmake
-            - cmake_unit_test
+  cmake_test:
+    description: Workflow to run all test
+    steps:
+      - checkout
+      - build_gtest
+      - install_cmake
+      - cmake_unit_test
 
-    generate-coverage-info-gcov:
-        description: use gcov to generate coverage information
-        steps:
-            - run : gcov -abcfu $(find build/CMakeFiles/coverage.dir/src -name "*.cc.o")
+  generate-coverage-info-gcov:
+    description: use gcov to generate coverage information
+    steps:
+      - run: gcov -abcfu $(find build/CMakeFiles/coverage.dir/src -name "*.cc.o")
 
-    upload-to-codecov:
-        description: Upload coverage to Codecov
-        steps:
-            - checkout
-            - build_gtest
-            - install_cmake
-            - cmake_coverage
-            - generate-coverage-info-gcov
-            - codecov/upload:
-                validate: false
+  upload-to-codecov:
+    description: Upload coverage to Codecov
+    steps:
+      - checkout
+      - build_gtest
+      - install_cmake
+      - cmake_coverage
+      - generate-coverage-info-gcov
+      - codecov/upload:
+          validate: false
 
 jobs:
-    build-and-test-gcc9:
-        description: Build repo
-        executor: gcc9
-        environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug, CTEST_FLAGS: --output-on-failure --verbose }
-        steps: [ cmake_test ]
-    upload-to-codecov:
-        description: Build and upload coverage to Codecov
-        executor: gcc9
-        environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug }
-        steps: [ upload-to-codecov ]
+  build-and-test-gcc9:
+    description: Build repo
+    executor: gcc9
+    environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug, CTEST_FLAGS: --output-on-failure --verbose }
+    steps: [ cmake_test ]
+  upload-to-codecov:
+    description: Build and upload coverage to Codecov
+    executor: gcc9
+    environment: { CMAKE_FLAGS: -DCMAKE_BUILD_TYPE=Debug }
+    steps: [ upload-to-codecov ]
 
 
 workflows:
-    version: 2.1
-    build-and-test:
-        jobs:
-            - build-and-test-gcc9
-    upload-to-codecov:
-        jobs:
-            - upload-to-codecov
+  version: 2.1
+  build-and-test:
+    jobs:
+      - build-and-test-gcc9
+  upload-to-codecov:
+    jobs:
+      - upload-to-codecov
