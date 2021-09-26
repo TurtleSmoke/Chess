@@ -20,6 +20,9 @@ jobs:
         continue-on-error: true
         run: clang-tidy $(find src -name "*.cc" -o -name "*.hh") --checks='' --header-filter=.* -- > clang-tidy-output
 
+      - name: Remove llvm-heading-guard error from absolute path
+        run: bash .github/workflows/fix-llvm-header-guard.sh
+
       - name: Remove absolute path
         run: sed -i 's?'`pwd`/'??g' clang-tidy-output
 
