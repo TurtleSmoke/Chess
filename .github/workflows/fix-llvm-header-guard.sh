@@ -8,7 +8,8 @@ do
         IFS= read -r "tild"
         IFS= read -r "expected"
         actualFiltered=$(echo "$actual" | grep -oE '[^ ]+$')
-        expectedFiltered=$(echo "$expected" | grep -oE 'CHESS.*$')
+        expectedFiltered="CHESS_"
+        expectedFiltered+=$(echo "$expected" | grep -oE 'CHESS.*$' | sed 's/CHESS_//g')
 
         if [ "$actualFiltered" = "$expectedFiltered" ]; then
             continue
