@@ -1,0 +1,5 @@
+#ifndef CHESS_SRC_TEST_COV_TEST2_HH
+#define CHESS_SRC_TEST_COV_TEST2_HH
+#pragma once
+
+#endif /* CHESS_SRC_TEST_COV_TEST_HH */
