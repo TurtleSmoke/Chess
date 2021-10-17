@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 while IFS= read -r line
 do
+    touch "clang-tidy-tmp"
 
     if echo "$line" | grep -q "llvm" ; then
         IFS= read -r "actual"
