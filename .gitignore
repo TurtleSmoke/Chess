@@ -62,3 +62,7 @@ build*/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,cmake
+
+# Clang format
+
+clang-tidy-output
