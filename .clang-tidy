@@ -11,5 +11,5 @@ Checks: '*,
 WarningsAsErrors: '*'
 HeaderFilterRegex: '.*'
 AnalyzeTemporaryDtors: false
-FormatStyle: google
+FormatStyle: file
 ...
