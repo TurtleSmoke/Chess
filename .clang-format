@@ -4,5 +4,14 @@ Language: Cpp
 BasedOnStyle: Google
 
 # Custom rules
-IndentWidth: 4
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
+ColumnLimit: 120
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '.*'
+    Priority: 1
+  - Regex: '<.*>'
+    Priority: 2
+IndentWidth: 4

@@ -1,15 +1,46 @@
 ---
-Checks: '*,
+# Based on GCP's C++ style guide: https://github.com/googleapis/google-cloud-cpp/blob/main/.clang-tidy
+#
+# Here is an explanation for why some checks are disabled:
+#
+#  -google-readability-casting:
+#     For convenience, I'm using C-style casts because they are shorter and easier to read.
+#     Since most casts will be between enum (int) and int, I'm not worried about the safety of the cast.
+#
+#  -google-readability-todo:
+#     It is a very useful check, but I'm disabling it since I'm alone... ;(
+#
+#  -misc-non-private-member-variables-in-classes:
+#     The code is not for production and there won't be an open API, so I'm not worried about the encapsulation.
+#
+#  -modernize-use-trailing-return-type:
+#     I don't find it much easier to read.
+#
+#  -readability-identifier-length:
+#     Some very common names are short, like 'i' or 'os', so I'm disabling this check.
+#     Variable names should be meaningful, no matter the length.
+#
+#
+#  -readability-implicit-bool-conversion:
+#     is disabled because I'm a implicit conversion enjoyer and I love danger! :D (Please do not reproduce this at home)
+
+Checks: '-*,
+        abseil-*,
+        bugprone-*,
+        google-*,
+        misc-*,
+        modernize-*,
+        performance-*,
+        portability-*,
+        readability-*,
+        -google-readability-casting,
+        -google-readability-todo,
+        -misc-non-private-member-variables-in-classes,
         -modernize-use-trailing-return-type,
-        -readability-braces-around-statements,
-        -google-readability-braces-around-statements,
-        -hicpp-braces-around-statements,
         -readability-identifier-length,
-        -llvmlibc-*,
-        -llvm-header-guard,
+        -readability-implicit-bool-conversion,
         '
 WarningsAsErrors: '*'
 HeaderFilterRegex: '.*'
-AnalyzeTemporaryDtors: false
-FormatStyle: file
+FormatStyle: google
 ...
