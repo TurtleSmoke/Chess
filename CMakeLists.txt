@@ -8,17 +8,21 @@ set(CMAKE_CXX_STANDARD 17)
 
 # Sources
 set(SRC
-        "src/test_cov/test_tmp.cc"
+        "src/engine/board.cc"
 )
 
-include_directories(
-        "src"
-        "src/test_cov"
+# Headers (for IDEs)
+set(HDR
+        "src/engine/board.hh"
 )
 
 set(CMAKE_MODULE_PATH "third_party")
 
 add_executable(CHESS)
+include_directories(
+        "src"
+        "src/engine"
+)
 target_sources(CHESS PRIVATE "src/main.cc" ${SRC})
 target_compile_options(CHESS PRIVATE -Wall -Werror -Wextra -pedantic)
 
@@ -37,7 +41,7 @@ target_sources(unit_test PRIVATE
         ${SRC_UNIT_TEST})
 target_compile_options(unit_test PRIVATE -O0 -g3 -fsanitize=address)
 target_link_options(unit_test PRIVATE -O0 -g3 -fsanitize=address)
-target_link_libraries(unit_test PRIVATE Threads::Threads gtest gtest_main)
+target_link_libraries(unit_test PRIVATE Threads::Threads gtest gtest_main gmock_main)
 
 add_test(
         NAME Unit
@@ -51,4 +55,4 @@ target_sources(coverage PRIVATE
         ${SRC_UNIT_TEST})
 target_compile_options(coverage PRIVATE "-O0" "-g3" "--coverage")
 target_link_options(coverage PRIVATE "-O0" "-g3" "--coverage")
-target_link_libraries(coverage PRIVATE Threads::Threads gtest gtest_main)
+target_link_libraries(coverage PRIVATE Threads::Threads gtest gtest_main gmock_main)
