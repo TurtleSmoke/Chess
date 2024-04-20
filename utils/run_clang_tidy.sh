@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# Run clang-format on all source files in the project
+# Run clang-tidy on all files in the project
 # shellcheck disable=SC2046
-clang-tidy $(find src/ -name '*.cc' -or -name '*.hh') --
+clang-tidy -extra-arg=-std=c++17 $(find src -name "*.cc" -o -name "*.hh") --
