@@ -5,5 +5,6 @@ int main() {
     std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     chess::Board board(fen);
     std::cout << board << std::endl;
+    std::cout << "TEST" << std::endl;
     return 0;
 }
