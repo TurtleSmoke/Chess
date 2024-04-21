@@ -108,8 +108,6 @@ class Board {
     [[nodiscard]] Piece piece_on(Square square) const;
 
     Piece board[SQUARE_NB] = {NO_PIECE};
-    // Bitboard color[COLOR_NB] = {0};
-    // Bitboard type[PIECE_TYPE_NB] = {0};
 
     int turn = WHITE;
     int castling_rights = NO_CASTLING;
