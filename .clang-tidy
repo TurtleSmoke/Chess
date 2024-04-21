@@ -13,13 +13,15 @@
 #  -misc-non-private-member-variables-in-classes:
 #     The code is not for production and there won't be an open API, so I'm not worried about the encapsulation.
 #
+#  -modernize-avoid-c-arrays:
+#     All arrays are static and have a fixed size, I'm not interested in the std::array API.
+#
 #  -modernize-use-trailing-return-type:
 #     I don't find it much easier to read.
 #
 #  -readability-identifier-length:
 #     Some very common names are short, like 'i' or 'os', so I'm disabling this check.
 #     Variable names should be meaningful, no matter the length.
-#
 #
 #  -readability-implicit-bool-conversion:
 #     is disabled because I'm a implicit conversion enjoyer and I love danger! :D (Please do not reproduce this at home)
@@ -36,6 +38,7 @@ Checks: '-*,
         -google-readability-casting,
         -google-readability-todo,
         -misc-non-private-member-variables-in-classes,
+        -modernize-avoid-c-arrays,
         -modernize-use-trailing-return-type,
         -readability-identifier-length,
         -readability-implicit-bool-conversion,
