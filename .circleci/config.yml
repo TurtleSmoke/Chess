@@ -53,7 +53,7 @@ commands:
           ./coverage || true # Ugly hack to ignore test failure for coverage
 
   cmake_test:
-    description: Workflow to run all test
+    description: Workflow to run all tests
     steps:
       - checkout
       - build_gtest

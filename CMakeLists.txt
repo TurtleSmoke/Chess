@@ -27,14 +27,14 @@ target_sources(CHESS PRIVATE "src/main.cc" ${SRC})
 target_compile_options(CHESS PRIVATE -Wall -Werror -Wextra -pedantic)
 
 # Test sources
-file(GLOB_RECURSE SRC_UNIT_TEST ${CMAKE_CURRENT_SOURCE_DIR}/test/unit/*.cc)
+file(GLOB_RECURSE SRC_UNIT_TEST ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.cc)
 
-# Used for both test and coverage
+# Used for both tests and coverage
 enable_testing()
 find_package(Threads REQUIRED)
 add_subdirectory(third_party/googletest)
 
-# Run test only.
+# Run tests only.
 add_executable(unit_test)
 target_sources(unit_test PRIVATE
         ${SRC}
