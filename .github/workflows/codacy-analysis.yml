@@ -18,7 +18,7 @@ jobs:
 
       - name: Run clang-tidy
         continue-on-error: true
-        run: clang-tidy $(find src -name "*.cc" -o -name "*.hh") -- > clang-tidy-output
+        run: clang-tidy $(find src -name "*.cc" -o -name "*.hh") -extra-arg=-std=c++17 -- -Isrc/engine > clang-tidy-output
 
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@master
