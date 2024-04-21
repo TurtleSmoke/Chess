@@ -9,7 +9,7 @@
 namespace chess {
 
 using Bitboard = uint64_t;
-constexpr std::string_view piece_to_char(" PNBRQK  pnbrqk");
+constexpr std::string_view piece_to_char(".PNBRQK  pnbrqk");
 
 enum Color : int {
     WHITE,
@@ -112,7 +112,7 @@ class Board {
     // Bitboard type[PIECE_TYPE_NB] = {0};
 
     int turn = WHITE;
-    int castling_rights = ANY_CASTLING;
+    int castling_rights = NO_CASTLING;
 };
 
 std::ostream& operator<<(std::ostream& os, const Board& board);

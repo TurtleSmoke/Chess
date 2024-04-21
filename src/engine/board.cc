@@ -34,7 +34,7 @@ Board::Board(const std::string& fen) {
     ss >> token;
 
     // Handle Castling rights
-    while ((ss >> token) && isspace(token)) {
+    while ((ss >> token) && !isspace(token)) {
         if (token == 'K') {
             castling_rights |= WHITE_KING_SIDE;
         } else if (token == 'Q') {

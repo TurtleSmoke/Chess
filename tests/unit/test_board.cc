@@ -24,4 +24,23 @@ TEST(BOARD, default_fen) {
     ASSERT_EQ(actual.turn, WHITE);
     ASSERT_EQ(actual.castling_rights, ANY_CASTLING);
 }
+
+TEST(BOARD, print_default_fen) {
+    std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    chess::Board board(fen);
+    std::ostringstream oss;
+    oss << board;
+
+    std::string expected =
+        "r n b q k b n r \n"
+        "p p p p p p p p \n"
+        ". . . . . . . . \n"
+        ". . . . . . . . \n"
+        ". . . . . . . . \n"
+        ". . . . . . . . \n"
+        "P P P P P P P P \n"
+        "R N B Q K B N R \n";
+
+    ASSERT_EQ(oss.str(), expected);
+}
 }  // namespace chess
