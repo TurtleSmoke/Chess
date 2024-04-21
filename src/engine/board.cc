@@ -1,8 +1,6 @@
 #include "board.hh"
 
-#include <cassert>
 #include <cctype>
-#include <cstring>
 #include <sstream>
 
 namespace chess {
@@ -14,11 +12,10 @@ namespace chess {
  */
 Board::Board(const std::string& fen) {
     std::istringstream ss(fen);
-
     ss >> std::noskipws;
 
     // Handle Piece placement
-    unsigned char token = 0;
+    char token = 0;
     Square current_square = SQ_A8;
     while ((ss >> token) && !isspace(token)) {
         if (isdigit(token)) {
@@ -31,8 +28,25 @@ Board::Board(const std::string& fen) {
         }
     }
 
-    // TODO: Handle the rest of the FEN string
+    // Handle active color
     ss >> token;
+    turn = (token == 'w') ? WHITE : BLACK;
+    ss >> token;
+
+    // Handle Castling rights
+    while ((ss >> token) && isspace(token)) {
+        if (token == 'K') {
+            castling_rights |= WHITE_KING_SIDE;
+        } else if (token == 'Q') {
+            castling_rights |= WHITE_QUEEN_SIDE;
+        } else if (token == 'k') {
+            castling_rights |= BLACK_KING_SIDE;
+        } else if (token == 'q') {
+            castling_rights |= BLACK_QUEEN_SIDE;
+        }
+    }
+
+    // TODO: Handle the rest of the FEN string when backend is more complete
 }
 
 std::ostream& operator<<(std::ostream& os, const Board& board) {

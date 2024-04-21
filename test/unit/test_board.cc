@@ -21,5 +21,7 @@ TEST(BOARD, default_fen) {
     // clang-format on
 
     ASSERT_THAT(actual.board, testing::ElementsAreArray(expected_board));
+    ASSERT_EQ(actual.turn, WHITE);
+    ASSERT_EQ(actual.castling_rights, ANY_CASTLING);
 }
 }  // namespace chess

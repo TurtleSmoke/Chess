@@ -46,6 +46,22 @@ enum Square : int {
     SQUARE_ZERO = 0,
     SQUARE_NB   = 64
 };
+
+enum CastlingRights {
+    NO_CASTLING,
+    WHITE_KING_SIDE,
+    WHITE_QUEEN_SIDE = WHITE_KING_SIDE << 1,
+    BLACK_KING_SIDE  = WHITE_KING_SIDE << 2,
+    BLACK_QUEEN_SIDE = WHITE_KING_SIDE << 3,
+
+    KING_SIDE      = WHITE_KING_SIDE | BLACK_KING_SIDE,
+    QUEEN_SIDE     = WHITE_QUEEN_SIDE | BLACK_QUEEN_SIDE,
+    WHITE_CASTLING = WHITE_KING_SIDE | WHITE_QUEEN_SIDE,
+    BLACK_CASTLING = BLACK_KING_SIDE | BLACK_QUEEN_SIDE,
+    ANY_CASTLING   = WHITE_CASTLING | BLACK_CASTLING,
+
+    CASTLING_RIGHT_NB = 16
+};
 // clang-format on
 
 enum File : int {
@@ -89,11 +105,14 @@ class Board {
     explicit Board(const std::string& fen);
 
     void place_piece(Piece piece, Square square);
-    Piece piece_on(Square square) const;
+    [[nodiscard]] Piece piece_on(Square square) const;
 
     Piece board[SQUARE_NB] = {NO_PIECE};
     Bitboard color[COLOR_NB] = {0};
     Bitboard type[PIECE_TYPE_NB] = {0};
+
+    int turn = WHITE;
+    int castling_rights = ANY_CASTLING;
 };
 
 std::ostream& operator<<(std::ostream& os, const Board& board);
