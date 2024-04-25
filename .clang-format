@@ -5,7 +5,6 @@ BasedOnStyle: Google
 
 # Custom rules
 AllowShortEnumsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 ColumnLimit: 120
 IncludeBlocks: Regroup
