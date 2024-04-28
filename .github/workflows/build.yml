@@ -35,7 +35,7 @@ jobs:
           cmake -S . -B build
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Debug
           cd build && ./coverage
-          gcov -abcfu $(find CMakeFiles/coverage.dir/src -name "*.cc.o")
+          gcov -abcfu $(find CMakeFiles/coverage.dir -name "*.cc.o")
 
 
       - name: Run sonar-scanner

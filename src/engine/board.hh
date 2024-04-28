@@ -11,10 +11,29 @@ namespace chess {
 using Bitboard = uint64_t;
 constexpr std::string_view piece_to_char(".PNBRQK  pnbrqk");
 
+constexpr Bitboard RANK_1_BB = 0x00000000000000FF;
+constexpr Bitboard RANK_2_BB = RANK_1_BB << (1 * 8);
+constexpr Bitboard RANK_3_BB = RANK_1_BB << (2 * 8);
+constexpr Bitboard RANK_4_BB = RANK_1_BB << (3 * 8);
+constexpr Bitboard RANK_5_BB = RANK_1_BB << (4 * 8);
+constexpr Bitboard RANK_6_BB = RANK_1_BB << (5 * 8);
+constexpr Bitboard RANK_7_BB = RANK_1_BB << (6 * 8);
+constexpr Bitboard RANK_8_BB = RANK_1_BB << (7 * 8);
+
+constexpr Bitboard FILE_A_BB = 0x0101010101010101;
+constexpr Bitboard FILE_B_BB = FILE_A_BB << 1;
+constexpr Bitboard FILE_C_BB = FILE_A_BB << 2;
+constexpr Bitboard FILE_D_BB = FILE_A_BB << 3;
+constexpr Bitboard FILE_E_BB = FILE_A_BB << 4;
+constexpr Bitboard FILE_F_BB = FILE_A_BB << 5;
+constexpr Bitboard FILE_G_BB = FILE_A_BB << 6;
+constexpr Bitboard FILE_H_BB = FILE_A_BB << 7;
+
 enum Color : int {
     WHITE,
     BLACK,
-    COLOR_NB = 2
+    COLOR_NB = 2,
+    BOTH = 2
 };
 
 // clang-format off
@@ -107,6 +126,8 @@ class Board {
     void place_piece(Piece piece, Square square);
     [[nodiscard]] Piece piece_on(Square square) const;
 
+    [[nodiscard]] inline Bitboard get_pieces(PieceType piece_type = ALL_PIECES) const;
+
     Piece board[SQUARE_NB] = {NO_PIECE};
     Bitboard pieces[PIECE_TYPE_NB] = {0};
     Bitboard colors[COLOR_NB] = {0};
@@ -117,12 +138,17 @@ class Board {
 
 std::ostream& operator<<(std::ostream& os, const Board& board);
 
+
 // Sanity check
+//
+// These functions does not need to be tested as they are only used in assertions.
+// GCOVR_EXCL_START
 constexpr bool valid_square(Square square) { return square >= SQ_A1 && square <= SQ_H8; }
 
 constexpr bool valid_piece(Piece piece) {
     return (piece >= W_PAWN && piece <= W_KING) || (piece >= B_PAWN && piece <= B_KING);
 }
+// GCOVR_EXCL_STOP
 
 // Utils bitboard functions
 constexpr Square at(File file, Rank rank) { return Square((rank << 3) + file); }
@@ -157,6 +183,8 @@ constexpr Color color_of(Piece piece) {
     return Color(piece >> COLOR_BIT);
 }
 
+inline Bitboard Board::get_pieces(PieceType piece_type) const { return pieces[piece_type]; }
+
 // Overload ++ and -- operators:
 inline Rank& operator--(Rank& rank) { return rank = Rank(int(rank) - 1); }
 inline File& operator++(File& file) { return file = File(int(file) + 1); }
@@ -167,20 +195,45 @@ constexpr Direction operator*(int x, Direction dir) { return Direction(x * int(d
 constexpr Square operator-(Square square, Direction dir) { return Square(int(square) - int(dir)); }
 constexpr Square operator+(Square square, Direction dir) { return Square(int(square) + int(dir)); }
 inline Square& operator+=(Square& square, Direction dir) { return square = square + dir; }
-inline Square& operator-=(Square& square, Direction dir) { return square = square - dir; }
+//inline Square& operator-=(Square& square, Direction dir) { return square = square - dir; }
+
+template <Direction Direction>
+Bitboard shift(Bitboard bitboard) {
+    const int PUSH_ONE_RANK = 8;
+    switch (Direction) {
+        case NORTH:
+            return bitboard << PUSH_ONE_RANK;
+        case EAST:
+            return (bitboard & ~FILE_H_BB) << 1;
+        case SOUTH:
+            return bitboard >> PUSH_ONE_RANK;
+        case WEST:
+            return (bitboard & ~FILE_A_BB) >> 1;
+        case NORTH_EAST:
+            return (bitboard & ~FILE_H_BB) << (PUSH_ONE_RANK + 1);
+        case SOUTH_EAST:
+            return (bitboard & ~FILE_H_BB) >> (PUSH_ONE_RANK - 1);
+        case SOUTH_WEST:
+            return (bitboard & ~FILE_A_BB) >> (PUSH_ONE_RANK + 1);
+        case NORTH_WEST:
+            return (bitboard & ~FILE_A_BB) << (PUSH_ONE_RANK - 1);
+        default:
+            assert(false && "Invalid shift direction");
+    }
+}
 
 // Overload binary operators for bitboards
-inline Bitboard operator&(Bitboard b, Square s) { return b & square_to_bb(s); }
-inline Bitboard operator|(Bitboard b, Square s) { return b | square_to_bb(s); }
-inline Bitboard operator^(Bitboard b, Square s) { return b ^ square_to_bb(s); }
+//inline Bitboard operator&(Bitboard b, Square s) { return b & square_to_bb(s); }
+//inline Bitboard operator|(Bitboard b, Square s) { return b | square_to_bb(s); }
+//inline Bitboard operator^(Bitboard b, Square s) { return b ^ square_to_bb(s); }
 inline Bitboard& operator|=(Bitboard& b, Square s) { return b |= square_to_bb(s); }
-inline Bitboard& operator^=(Bitboard& b, Square s) { return b ^= square_to_bb(s); }
+//inline Bitboard& operator^=(Bitboard& b, Square s) { return b ^= square_to_bb(s); }
 
-inline Bitboard operator&(Square s, Bitboard b) { return b & s; }
-inline Bitboard operator|(Square s, Bitboard b) { return b | s; }
-inline Bitboard operator^(Square s, Bitboard b) { return b ^ s; }
+//inline Bitboard operator&(Square s, Bitboard b) { return b & s; }
+//inline Bitboard operator|(Square s, Bitboard b) { return b | s; }
+//inline Bitboard operator^(Square s, Bitboard b) { return b ^ s; }
 
-inline Bitboard operator|(Square s1, Square s2) { return square_to_bb(s1) | s2; }
+//inline Bitboard operator|(Square s1, Square s2) { return square_to_bb(s1) | s2; }
 
 // Useful board operations
 inline void Board::place_piece(Piece piece, Square square) {
