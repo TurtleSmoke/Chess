@@ -126,7 +126,7 @@ class Board {
     void place_piece(Piece piece, Square square);
     [[nodiscard]] Piece piece_on(Square square) const;
 
-    [[nodiscard]] inline Bitboard get_pieces(PieceType piece_type = ALL_PIECES) const;
+    [[nodiscard]] Bitboard get_pieces(PieceType piece_type = ALL_PIECES) const;
 
     Piece board[SQUARE_NB] = {NO_PIECE};
     Bitboard pieces[PIECE_TYPE_NB] = {0};
