@@ -142,13 +142,13 @@ std::ostream& operator<<(std::ostream& os, const Board& board);
 // Sanity check
 //
 // These functions does not need to be tested as they are only used in assertions.
-// GCOVR_EXCL_START
+// GCOV_EXCL_START
 constexpr bool valid_square(Square square) { return square >= SQ_A1 && square <= SQ_H8; }
 
 constexpr bool valid_piece(Piece piece) {
     return (piece >= W_PAWN && piece <= W_KING) || (piece >= B_PAWN && piece <= B_KING);
 }
-// GCOVR_EXCL_STOP
+// GCOV_EXCL_STOP
 
 // Utils bitboard functions
 constexpr Square at(File file, Rank rank) { return Square((rank << 3) + file); }
