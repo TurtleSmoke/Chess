@@ -63,7 +63,7 @@ commands:
   generate-coverage-info-gcov:
     description: use gcov to generate coverage information
     steps:
-      - run: gcov -abcfu $(find build/CMakeFiles/coverage.dir/src -name "*.cc.o")
+      - run: gcov -abcfu $(find build/CMakeFiles/coverage.dir -name "*.cc.o")
 
   upload-to-codecov:
     description: Upload coverage to Codecov

@@ -13,7 +13,10 @@ set(SRC
 
 # Headers (for IDEs)
 set(HDR
+        "src/engine/bitboard.hh"
         "src/engine/board.hh"
+        "src/engine/moves/move.hh"
+        "src/engine/moves/pawn.hh"
 )
 
 set(CMAKE_MODULE_PATH "third_party")
@@ -22,6 +25,7 @@ add_executable(chess)
 include_directories(
         "src"
         "src/engine"
+        "src/engine/moves"
 )
 target_sources(chess PRIVATE "src/main.cc" ${SRC})
 target_compile_options(chess PRIVATE -Wall -Werror -Wextra -pedantic)
@@ -50,21 +54,21 @@ add_executable(coverage)
 target_sources(coverage PRIVATE
         ${SRC}
         ${SRC_UNIT_TEST})
-target_compile_options(coverage PRIVATE -O0 -g3 --coverage -DNDEBUG) # -DNDEBUG is to disable assert, gives worse branch coverage
-target_link_options(coverage PRIVATE -O0 -g3 --coverage -DNDEBUG)
+target_compile_options(coverage PRIVATE -O0 -g3 --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fkeep-inline-functions -DNDEBUG) # -DNDEBUG is to disable assert, gives worse branch coverage
+target_link_options(coverage PRIVATE -O0 -g3 --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fkeep-inline-functions -DNDEBUG)
 target_link_libraries(coverage PRIVATE Threads::Threads gtest gtest_main gmock_main)
 
 # Run gcov
 add_custom_target(
         gcov
         COMMAND coverage
-        COMMAND gcov -abcfu `find CMakeFiles/coverage.dir/src -name \"*.cc.o\"`
+        COMMAND gcov -abcfu `find CMakeFiles/coverage.dir -name \"*.cc.o\"`
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         DEPENDS coverage
 )
 
 
-# Run gcovr -- --gcov-ignore-parse-errors --keep
+# Run gcovr
 add_custom_target(
         gcovr
         COMMAND gcovr -r ${CMAKE_CURRENT_SOURCE_DIR} --exclude ${CMAKE_CURRENT_SOURCE_DIR}/tests/ --exclude ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ --use-gcov-files --gcov-ignore-parse-errors --keep --html --html-details -o coverage.html
