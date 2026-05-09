@@ -104,6 +104,21 @@ Move *generate_pawn_promotions(const Board &board, Move *moves) {
     return moves;
 }
 
+template <Color TURN>
+Move &generate_pawn_en_passant(const Board &board, Move *moves) {
+    constexpr Direction left_attack = TURN == WHITE ? NORTH_WEST : SOUTH_EAST;
+    constexpr Direction right_attack = TURN == WHITE ? NORTH_EAST : SOUTH_WEST;
+    constexpr Direction all_attacks = left_attack | right_attack;
+
+    Bitboard pawns = board.pieces[PAWN] & board.colors[TURN];
+
+    Bitboard pawns_en_passant = pawns & board.state_info.en_passant_square;
+
+    while (pawns_en_passant) {
+        moves = Move(pop_lsb(pawns_en_passant) - all_attacks, board.state_info.en_passant_square, EN_PASSANT);
+    }
+}
+
 }  // namespace chess
 
 #endif  // CHESS_PAWN_HH

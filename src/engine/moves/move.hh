@@ -33,6 +33,7 @@ struct Move {
     constexpr Move(Square from, Square to) : Move((from << FROM_SHIFT) + to) {}
     constexpr Move(Square from, Square to, PieceType promotion)
         : Move(PROMOTION + ((KNIGHT - promotion) << PROMOTION_SHIFT) + (from << FROM_SHIFT) + to) {}
+    constexpr Move(Square from, Square to, MoveFlag flag) : Move(flag + (from << FROM_SHIFT) + to) {}
 
    protected:
     std::uint16_t data;

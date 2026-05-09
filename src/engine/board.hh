@@ -119,6 +119,10 @@ enum Direction : int {
     NORTH_WEST = NORTH + WEST
 };
 
+struct StateInfo {
+    Square en_passant_square = SQ_NONE;
+};
+
 class Board {
    public:
     explicit Board(const std::string& fen);
@@ -134,6 +138,7 @@ class Board {
 
     Color turn = WHITE;
     int castling_rights = NO_CASTLING;
+    StateInfo state_info;
 };
 
 std::ostream& operator<<(std::ostream& os, const Board& board);
@@ -196,6 +201,7 @@ constexpr Color operator~(Color color) { return Color(color ^ BLACK); }
 
 // Handle square and direction operations
 constexpr Direction operator*(int x, Direction dir) { return Direction(x * int(dir)); }
+constexpr Direction operator|(Direction dir1, Direction dir2) { return Direction(int(dir1) | int(dir2)); }
 constexpr Square operator-(Square square, Direction dir) { return Square(int(square) - int(dir)); }
 constexpr Square operator+(Square square, Direction dir) { return Square(int(square) + int(dir)); }
 inline Square& operator+=(Square& square, Direction dir) { return square = square + dir; }
